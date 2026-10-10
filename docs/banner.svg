@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" role="img" aria-labelledby="t d">
+  <title id="t">databasus-exporter</title>
+  <desc id="d">Prometheus exporter for Databasus: backup age, status, size and restore tests for every database.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171a22"/>
+      <stop offset="1" stop-color="#0e1016"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.24" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="disk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#232836"/>
+      <stop offset=".5" stop-color="#2c3344"/>
+      <stop offset="1" stop-color="#1c202b"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#4ade80"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity=".035"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="360" rx="28" fill="url(#bg)"/>
+  <rect width="1280" height="360" rx="28" fill="url(#grid)"/>
+  <rect width="1280" height="360" rx="28" fill="url(#glow)"/>
+  <rect x=".5" y=".5" width="1279" height="359" rx="27.5" fill="none" stroke="#252a36"/>
+
+  <!-- the mark: a database with a backup-age trace running through it -->
+  <g transform="translate(300 180)">
+    <!-- cylinder: three stacked platters -->
+    <g stroke="#4a5468" stroke-width="2.5">
+      <path d="M-92 52 V84 A92 26 0 0 0 92 84 V52" fill="url(#disk)"/>
+      <path d="M-92 4 V36 A92 26 0 0 0 92 36 V4" fill="url(#disk)"/>
+      <path d="M-92 -44 V-12 A92 26 0 0 0 92 -12 V-44" fill="url(#disk)"/>
+      <ellipse cx="0" cy="-44" rx="92" ry="26" fill="#262c3a"/>
+      <path d="M-92 -12 A92 26 0 0 0 92 -12 M-92 36 A92 26 0 0 0 92 36" fill="none" stroke="#3a4252"/>
+    </g>
+    <!-- status lights, one per platter -->
+    <g fill="#4ade80">
+      <circle cx="62" cy="-8" r="5"/>
+      <circle cx="62" cy="40" r="5"/>
+      <circle cx="62" cy="88" r="5" fill="#f59e0b"/>
+    </g>
+
+    <!-- the scraped signal: age climbs, drops to zero at each backup -->
+    <path d="M-150 20 L-118 4 L-118 34 L-86 18 L-86 34 L-54 18 L-54 34 L-22 18 L-22 34 L10 18 L10 34 L42 18 L42 34 L74 18 L74 34 L106 18 L106 34 L150 12"
+          fill="none" stroke="url(#pulse)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+  </g>
+
+  <!-- restore-verified badge -->
+  <g transform="translate(398 282) scale(1.6)" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="0" r="19" fill="#12141a" stroke="#2c5138"/>
+    <path d="M-7 0.5 L-2 5.5 L8 -5"/>
+  </g>
+
+  <!-- wordmark -->
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+    <text x="520" y="164" font-size="74" font-weight="700" letter-spacing="-1.5"><tspan fill="#5b6273">databasus-</tspan><tspan fill="#eef1f7">exporter</tspan></text>
+    <text x="524" y="214" font-size="22" fill="#8a90a0">Is every backup recent, complete and restorable? Ask Prometheus.</text>
+    <g font-size="17" font-weight="600" letter-spacing="1.5">
+      <rect x="524" y="250" width="86" height="36" rx="18" fill="#f59e0b" fill-opacity=".12" stroke="#f59e0b" stroke-opacity=".45"/>
+      <text x="567" y="274" text-anchor="middle" fill="#fcd34d">RUST</text>
+      <rect x="624" y="250" width="160" height="36" rx="18" fill="#4ade80" fill-opacity=".1" stroke="#4ade80" stroke-opacity=".45"/>
+      <text x="704" y="274" text-anchor="middle" fill="#86efac">PROMETHEUS</text>
+      <rect x="798" y="250" width="124" height="36" rx="18" fill="#eef1f7" fill-opacity=".06" stroke="#eef1f7" stroke-opacity=".25"/>
+      <text x="860" y="274" text-anchor="middle" fill="#cfd4de">GRAFANA</text>
+      <rect x="936" y="250" width="146" height="36" rx="18" fill="#eef1f7" fill-opacity=".06" stroke="#eef1f7" stroke-opacity=".25"/>
+      <text x="1009" y="274" text-anchor="middle" fill="#cfd4de">DATABASUS</text>
+    </g>
+  </g>
+</svg>

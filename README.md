@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/banner.svg" alt="databasus-exporter: backup age, status and restore tests for Prometheus" width="100%">
+</p>
+
 # databasus-exporter
 
 Prometheus exporter for [Databasus](https://github.com/databasus/databasus).
