@@ -85,7 +85,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 3,
         "x": 0,
         "y": 0
@@ -113,12 +113,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
+          "displayName": "Databases",
           "color": {
             "mode": "thresholds"
           },
@@ -145,7 +146,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 3,
         "x": 3,
         "y": 0
@@ -173,12 +174,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
+          "displayName": "Latest backup OK",
           "color": {
             "mode": "thresholds"
           },
@@ -205,7 +207,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 3,
         "x": 6,
         "y": 0
@@ -233,12 +235,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
+          "displayName": "Latest backup failed",
           "color": {
             "mode": "thresholds"
           },
@@ -269,7 +272,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 3,
         "x": 9,
         "y": 0
@@ -297,12 +300,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
+          "displayName": "Restore test failed",
           "color": {
             "mode": "thresholds"
           },
@@ -333,7 +337,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 12,
         "y": 0
@@ -361,12 +365,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
+          "displayName": "Oldest completed backup",
           "color": {
             "mode": "thresholds"
           },
@@ -399,7 +404,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 16,
         "y": 0
@@ -427,12 +432,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
+          "displayName": "Latest backups, total",
           "color": {
             "mode": "thresholds"
           },
@@ -460,7 +466,7 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 20,
         "y": 0
@@ -488,12 +494,13 @@
         },
         "colorMode": "background",
         "graphMode": "none",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
           "unit": "none",
+          "displayName": "Exporter",
           "color": {
             "mode": "thresholds"
           },
@@ -540,10 +547,10 @@
         "uid": "${datasource}"
       },
       "gridPos": {
-        "h": 11,
+        "h": 15,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 5
       },
       "targets": [
         {
@@ -911,7 +918,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 20
       },
       "targets": [
         {
@@ -947,7 +954,7 @@
           "unit": "s",
           "custom": {
             "lineWidth": 2,
-            "fillOpacity": 10,
+            "fillOpacity": 0,
             "showPoints": "never",
             "stacking": {
               "mode": "none"
@@ -987,7 +994,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 20
       },
       "targets": [
         {
@@ -1047,7 +1054,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 28
       },
       "targets": [
         {
@@ -1106,7 +1113,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 23
+        "y": 28
       },
       "targets": [
         {
