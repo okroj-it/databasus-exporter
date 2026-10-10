@@ -1,4 +1,5 @@
 mod api;
+mod metrics;
 
 fn main() {
     let email = std::env::var("DATABASUS_EMAIL").unwrap_or_default();
