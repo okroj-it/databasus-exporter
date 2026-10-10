@@ -61,6 +61,14 @@ All per-database metrics carry `workspace` and `database` labels.
 Status gauges always carry every possible value (0 or 1), so an alert can
 match on them without waiting for a series to appear.
 
+### Grafana dashboard
+
+`dashboards/databasus.json` shows, per database, how long ago the last
+completed backup ran, the latest status, the restore test result, sizes and
+durations, plus a few totals and the exporter's own health. Import it in
+Grafana (Dashboards, New, Import) and pick your Prometheus data source; the
+workspace and database selectors fill themselves from the metrics.
+
 ### Example alerts
 
 ```promql
