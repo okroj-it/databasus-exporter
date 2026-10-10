@@ -35,6 +35,8 @@ pub struct DatabaseInfo {
 pub struct Snapshot {
     pub up: bool,
     pub duration_seconds: f64,
+    /// Unix seconds when the collection finished.
+    pub collected: f64,
     pub databases: Vec<DatabaseInfo>,
 }
 
@@ -132,6 +134,11 @@ pub fn render(s: &Snapshot) -> String {
         "Time the last collection from the Databasus API took.",
     );
     o.sample("databasus_scrape_duration_seconds", &[], s.duration_seconds);
+    o.header(
+        "databasus_collection_timestamp_seconds",
+        "When the last collection from the Databasus API finished.",
+    );
+    o.sample("databasus_collection_timestamp_seconds", &[], s.collected);
 
     o.header("databasus_database_info", "Databases known to Databasus.");
     for db in dbs {
@@ -234,6 +241,7 @@ mod tests {
         Snapshot {
             up: true,
             duration_seconds: 0.25,
+            collected: 1_760_090_000.0,
             databases: vec![
                 DatabaseInfo {
                     workspace: "Homelab".into(),

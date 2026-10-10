@@ -1,8 +1,8 @@
 //! Prometheus exporter for Databasus backups.
 //!
 //! Reads the Databasus REST API as a (preferably view-only) user and serves
-//! the result on /metrics. Collection happens on scrape, at most once per
-//! CACHE_SECONDS.
+//! the result on /metrics. A background thread collects every
+//! INTERVAL_SECONDS, so a scrape never waits on the API.
 
 mod api;
 mod metrics;
@@ -10,7 +10,9 @@ mod metrics;
 use std::env;
 use std::process::ExitCode;
 use std::str::FromStr;
-use std::time::{Duration, Instant};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use metrics::{BackupInfo, DatabaseInfo, Snapshot};
 
@@ -22,26 +24,27 @@ struct Config {
     email: String,
     password: String,
     listen: String,
-    cache: Duration,
+    interval: Duration,
 }
 
 impl Config {
     fn from_env() -> Result<Self, String> {
         let required = |k: &str| env::var(k).map_err(|_| format!("{k} is not set"));
-        let cache = env::var("CACHE_SECONDS")
+        let interval = env::var("INTERVAL_SECONDS")
             .ok()
             .map(|v| {
                 v.parse::<u64>()
-                    .map_err(|_| format!("CACHE_SECONDS: not a number: {v}"))
+                    .map_err(|_| format!("INTERVAL_SECONDS: not a number: {v}"))
             })
             .transpose()?
-            .unwrap_or(30);
+            .unwrap_or(30)
+            .max(5);
         Ok(Config {
             url: env::var("DATABASUS_URL").unwrap_or_else(|_| "http://localhost:4005".into()),
             email: required("DATABASUS_EMAIL")?,
             password: required("DATABASUS_PASSWORD")?,
             listen: env::var("LISTEN_ADDR").unwrap_or_else(|_| "0.0.0.0:9810".into()),
-            cache: Duration::from_secs(cache),
+            interval: Duration::from_secs(interval),
         })
     }
 }
@@ -125,6 +128,10 @@ fn collect(client: &mut api::Client) -> Snapshot {
     }
 
     snap.duration_seconds = started.elapsed().as_secs_f64();
+    snap.collected = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs_f64())
+        .unwrap_or_default();
     snap
 }
 
@@ -158,21 +165,38 @@ fn main() -> ExitCode {
         cfg.listen, cfg.url
     );
 
-    let mut client = api::Client::new(&cfg.url, cfg.email, cfg.password);
-    let mut cached: Option<(Instant, String)> = None;
+    // Latest rendered metrics; empty until the first collection finishes.
+    let latest = Arc::new(Mutex::new(String::new()));
 
-    // Requests are handled one at a time: scrapes are rare and a collection
-    // takes well under a second, so there is nothing to gain from threads.
+    // The API is usually quick, but a slow call (one was seen taking 5 s)
+    // must not make a scrape time out, so collection runs on its own.
+    {
+        let latest = Arc::clone(&latest);
+        let mut client = api::Client::new(&cfg.url, cfg.email, cfg.password);
+        let interval = cfg.interval;
+        thread::spawn(move || {
+            loop {
+                let body = metrics::render(&collect(&mut client));
+                *latest.lock().unwrap_or_else(|p| p.into_inner()) = body;
+                thread::sleep(interval);
+            }
+        });
+    }
+
     for req in server.incoming_requests() {
         match req.url() {
             "/metrics" => {
-                let fresh = matches!(&cached, Some((at, _)) if at.elapsed() < cfg.cache);
-                if !fresh {
-                    let body = metrics::render(&collect(&mut client));
-                    cached = Some((Instant::now(), body));
+                let body = latest.lock().unwrap_or_else(|p| p.into_inner()).clone();
+                if body.is_empty() {
+                    respond(
+                        req,
+                        503,
+                        "text/plain",
+                        "first collection still running\n".into(),
+                    );
+                } else {
+                    respond(req, 200, "text/plain; version=0.0.4", body);
                 }
-                let body = cached.as_ref().map(|(_, b)| b.clone()).unwrap_or_default();
-                respond(req, 200, "text/plain; version=0.0.4", body);
             }
             "/healthz" => respond(req, 200, "text/plain", "ok\n".into()),
             _ => respond(req, 404, "text/plain", "not found\n".into()),
